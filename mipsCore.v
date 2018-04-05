@@ -962,12 +962,12 @@ module mipsCore(
 			else if (alu_op_f1 == 20'b00000000000000000100) begin // BGTZ
 				is_branch = 1;
 				if (src0_f1_d > 0) begin
-					if (result == 1 && prediction == 1) begin
+					if (result_f2 == 1 && prediction_f2 == 1) begin
 						//Here, you got a hit in the BTB and you predicted taken - correct
 						sI = 3'b001;
 						sK = 1;
 					end
-					else if (result == 1 && prediction == 0) begin
+					else if (result_f2 == 1 && prediction_f2 == 0) begin
 						//Here you got a hit in the BTB and you predicted not taken - misprediction of not taken
 						sI = 3'b010;
 						sK = 0;	
@@ -983,12 +983,12 @@ module mipsCore(
 				else begin
 					branch_equality = 0;
 					if (data_hazFlag == 1'b0 && jump_Flag == 1'b0) begin
-						if (result == 1 && prediction == 1) begin
+						if (result_f2 == 1 && prediction_f2 == 1) begin
 							//Here, you got a hit in the BTB and you predicted taken - misprediction of taken	
 							sI = 3'b110;	
 							sK = 0;
 						end
-						else if (result == 1 && prediction == 0) begin
+						else if (result_f2 == 1 && prediction_f2 == 0) begin
 							//Here, you got a hit in the BTB and predicted not taken - correct
 							sI = 3'b001;
 							sK = 1;
@@ -1006,12 +1006,12 @@ module mipsCore(
 				is_branch = 1;
         	    if (src0_f1_d != src1_f1_d) begin
 						branch_equality = 1;
-						if (result == 1 && prediction == 1) begin
+						if (result_f2 == 1 && prediction_f2 == 1) begin
 							//Here, you got a hit in the BTB and you predicted taken - correct
 							sI = 3'b001;
 							sK = 1;
 						end
-						else if (result == 1 && prediction == 0) begin
+						else if (result_f2 == 1 && prediction_f2 == 0) begin
 							//Here you got a hit in the BTB and you predicted not taken - misprediction of not taken
 							sI = 3'b010;
 							sK = 0;	
@@ -1026,12 +1026,12 @@ module mipsCore(
         	    else begin
 						branch_equality = 0;
         	            if (data_hazFlag == 1'b0 && jump_Flag == 1'b0) begin
-							if (result == 1 && prediction == 1) begin
+							if (result_f2 == 1 && prediction_f2 == 1) begin
 								//Here, you got a hit in the BTB and you predicted taken - misprediction of taken	
 								sI = 3'b110;	
 								sK = 0;
 							end
-							else if (result == 1 && prediction == 0) begin
+							else if (result_f2 == 1 && prediction_f2 == 0) begin
 								//Here, you got a hit in the BTB and predicted not taken - correct
 								sI = 3'b001;
 								sK = 1;
@@ -1269,7 +1269,7 @@ module mipsCore(
 
 	always_comb begin
 		if (instr[15] == 1'b1) begin
-                        signext = {{16{1'b1}},instr[15:0]};
+            signext = {{16{1'b1}},instr[15:0]};
 		end
 		else begin
 			signext = {16'b0,instr[15:0]};
